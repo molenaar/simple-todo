@@ -50,17 +50,20 @@ The application will be available at `http://localhost:4321`
 
 ## 📚 Documentation
 
-### Core Documents
+### Core Documents (Following BMAD Methodology Flow)
+- **[Brainstorming Results](docs/brainstorming-session-results.md)** - Creative ideation from SCAMPER, mind mapping, and six thinking hats
 - **[Project Brief](docs/brief.md)** - Executive summary, problem statement, and solution overview
 - **[Product Requirements](docs/prd.md)** - Detailed specifications, user stories, and acceptance criteria
 - **[Architecture Document](docs/architecture.md)** - Complete technical architecture and technology decisions
+
+### Documentation Hub
+- **[📚 Documentation Index](docs/README.md)** - Complete documentation overview with BMAD methodology flow and reading guides
 
 ### Development Resources
 - **[Documentation Standards](documentation-standards.md)** - Professional documentation rules and navigation patterns
 - **[BMAD Agents Guide](AGENTS.md)** - Available development agents and their usage patterns
 
 ### Research & Process
-- **[Brainstorming Results](docs/brainstorming-session-results.md)** - Creative ideation from SCAMPER, mind mapping, and six thinking hats
 - **[Azure Functions Integration](docs/azure-functions-astro-guide.md)** - Technical integration patterns and best practices
 - **[Implementation Methodology](docs/elio-struyf-methodology.md)** - Proven development patterns and approaches
 
@@ -94,7 +97,7 @@ This project serves as a living example of BMAD methodology in practice:
 
 This project welcomes contributions that align with BMAD methodology principles:
 
-1. **Review Documentation**: Start with the [Project Brief](docs/brief.md) and [Architecture Document](docs/architecture.md)
+1. **Review Documentation**: Start with the [📚 Documentation Index](docs/README.md) for complete overview, then [Brainstorming Results](docs/brainstorming-session-results.md) and [Project Brief](docs/brief.md)
 2. **Follow Standards**: Use [Documentation Standards](documentation-standards.md) for all documentation updates
 3. **Structured Development**: Leverage [BMAD Agents](AGENTS.md) for consistent development patterns
 4. **Quality First**: Maintain TypeScript strict mode, accessibility compliance, and performance standards
