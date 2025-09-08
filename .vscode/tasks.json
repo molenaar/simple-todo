@@ -1,0 +1,166 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+    {
+      "type": "npm",
+      "script": "dev",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "problemMatcher": [],
+      "label": "Core: Dev Server",
+      "detail": "Start full development environment (Astro + Azure Functions + Azurite)"
+    },
+    {
+      "type": "npm",
+      "script": "build",
+      "group": "build",
+      "problemMatcher": [],
+      "label": "Core: Build",
+      "detail": "Build for production"
+    },
+    {
+      "type": "npm",
+      "script": "preview",
+      "group": "test",
+      "problemMatcher": [],
+      "label": "Core: Preview",
+      "detail": "Preview production build"
+    },
+    {
+      "type": "npm",
+      "script": "test",
+      "group": "test",
+      "problemMatcher": [],
+      "label": "Core: Test",
+      "detail": "Run tests"
+    },
+    {
+      "type": "npm",
+      "script": "lint",
+      "group": "test",
+      "problemMatcher": [],
+      "label": "Core: Lint",
+      "detail": "Run linter"
+    },
+    {
+      "type": "npm",
+      "script": "type-check",
+      "group": "test",
+      "problemMatcher": [],
+      "label": "Core: Type Check",
+      "detail": "Run TypeScript type checking"
+    },
+    {
+      "type": "npm",
+      "script": "dev:app",
+      "group": "build",
+      "isBackground": true,
+      "problemMatcher": [],
+      "label": "Service: Astro Dev Server",
+      "detail": "Start Astro development server only"
+    },
+    {
+      "type": "npm",
+      "script": "dev:api",
+      "group": "build",
+      "isBackground": true,
+      "dependsOn": "Service: Install Python Dependencies",
+      "problemMatcher": [
+        {
+          "pattern": [
+            {
+              "regexp": "^.*$",
+              "file": 1,
+              "location": 2,
+              "message": 3
+            }
+          ],
+          "background": {
+            "activeOnStart": true,
+            "beginsPattern": "^.*Starting Azure Functions host.*",
+            "endsPattern": "^.*Azure Functions host started.*"
+          }
+        }
+      ],
+      "label": "Service: Azure Functions",
+      "detail": "Start Azure Functions on port 7071"
+    },
+    {
+      "type": "npm",
+      "script": "dev:storage",
+      "group": "build",
+      "isBackground": true,
+      "problemMatcher": [
+        {
+          "pattern": [
+            {
+              "regexp": "^.*$",
+              "file": 1,
+              "location": 2,
+              "message": 3
+            }
+          ],
+          "background": {
+            "activeOnStart": true,
+            "beginsPattern": "^.*Azurite.*starting.*",
+            "endsPattern": "^.*Azurite.*successfully started.*"
+          }
+        }
+      ],
+      "label": "Service: Start Azurite",
+      "detail": "Start Azurite storage emulator"
+    },
+    {
+      "type": "npm",
+      "script": "install:deps",
+      "group": "build",
+      "options": {
+        "cwd": "${workspaceFolder}/api"
+      },
+      "problemMatcher": [],
+      "label": "Service: Install Python Dependencies",
+      "detail": "Install Python requirements for Azure Functions"
+    },
+    {
+      "type": "npm",
+      "script": "stop:storage",
+      "group": "build",
+      "problemMatcher": [],
+      "label": "Service: Stop Azurite",
+      "detail": "Stop Azurite storage emulator"
+    },
+    {
+      "type": "npm",
+      "script": "dev",
+      "group": {
+        "kind": "build",
+        "isDefault": false
+      },
+      "isBackground": true,
+      "problemMatcher": [],
+      "label": "Combined: Start All",
+      "detail": "Start complete development environment (SWA with all services)"
+    },
+    {
+      "type": "npm",
+      "script": "dev:backend",
+      "group": "build",
+      "isBackground": true,
+      "dependsOn": "Service: Install Python Dependencies",
+      "problemMatcher": [],
+      "label": "Combined: Backend Only",
+      "detail": "Start backend services only (Azure Functions + Azurite)"
+    },
+    {
+      "type": "npm",
+      "script": "stop:all",
+      "group": "build",
+      "problemMatcher": [],
+      "label": "Combined: Stop All",
+      "detail": "Stop all development services"
+    }
+  ],
+	"inputs": []
+}

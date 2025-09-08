@@ -1,0 +1,36 @@
+{
+  "recommendations": [
+    // Core project technologies
+    "ms-azuretools.vscode-azurefunctions",
+    "ms-python.python",
+    "astro-build.astro-vscode",
+    
+    // Tailwind CSS support
+    "bradlc.vscode-tailwindcss",
+    
+    // TypeScript and JavaScript
+    "ms-vscode.vscode-typescript-next",
+    
+    // GitHub integration and AI
+    "github.copilot",
+    "github.copilot-chat",
+    "github.vscode-pull-request-github",
+    
+    // PowerShell for scripts
+    "ms-vscode.powershell",
+    
+    // Azure development tools
+    "ms-azuretools.vscode-azureresourcegroups",
+    "ms-azuretools.vscode-azurestorage",
+    
+    // Development utilities
+    "ms-vscode.vscode-json",
+    "redhat.vscode-yaml",
+    "ms-vscode.vscode-eslint"
+  ],
+  "unwantedRecommendations": [
+    // Avoid conflicting extensions
+    "ms-vscode.vscode-css",
+    "hookyqr.beautify"
+  ]
+}
