@@ -12,6 +12,10 @@ This folder contains comprehensive documentation for the Simple To-Do project, i
 - **[prd.md](prd.md)** - Product Requirements Document with detailed specifications and user stories
 - **[architecture.md](architecture.md)** - Complete fullstack architecture document with technology decisions
 
+### Organized Documentation
+- **[prd/](prd/README.md)** - Sharded Product Requirements Document organized into focused sections
+- **[architecture/](architecture/README.md)** - Comprehensive fullstack architecture documentation organized into implementation-ready sections
+
 ### Technical Implementation Guides
 - **[azure-functions-astro-guide.md](azure-functions-astro-guide.md)** - Integration guide for Azure Functions with Astro sites following best practices
 - **[elio-struyf-methodology.md](elio-struyf-methodology.md)** - Proven methodology for Astro + Azure Functions integration based on industry expertise
