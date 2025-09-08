@@ -13,11 +13,35 @@
 node_modules/
 npm-debug.log*
 yarn-debug.log*
+dist/
+build/
+
+# Python (Azure Functions)
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+.venv/
+venv/
+env/
+ENV/
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Azure Storage Emulator
+__azurite_db_*.json
+azurite_db_*.json
 
 # General
 .DS_Store
 Thumbs.db
 *.log
+temp/
+tmp/
 # Claude and Gemini
 claude-*
 gemini-*
