@@ -42,6 +42,7 @@ Thumbs.db
 *.log
 temp/
 tmp/
+.ignore/
 # Claude and Gemini
 claude-*
 gemini-*
