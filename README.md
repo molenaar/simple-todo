@@ -60,6 +60,7 @@ The application will be available at `http://localhost:4321`
 - **[📚 Documentation Index](docs/README.md)** - Complete documentation overview with BMAD methodology flow and reading guides
 - **[📝 Sharded PRD](docs/prd/README.md)** - Product Requirements Document organized into focused, navigable sections
 - **[🏗️ Sharded Architecture](docs/architecture/README.md)** - Fullstack architecture documentation organized for implementation clarity
+- **[📋 User Stories](docs/stories/README.md)** - Development-ready user stories with comprehensive technical context
 
 ### Development Resources
 - **[Documentation Standards](documentation-standards.md)** - Professional documentation rules and navigation patterns

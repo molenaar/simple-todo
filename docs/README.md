@@ -4,6 +4,15 @@
 
 This folder contains comprehensive documentation for the Simple To-Do project, including architecture decisions, requirements, research, and implementation guides.
 
+## Table of Contents
+
+- [Core Documents](#core-documents)
+- [Organized Documentation](#organized-documentation)
+- [Technical Implementation Guides](#technical-implementation-guides)
+- [BMAD Methodology Flow](#bmad-methodology-flow)
+- [Documentation Purpose](#documentation-purpose)
+- [Reading Guide](#reading-guide)
+
 ## 📚 Documentation
 
 ### Core Documents
@@ -15,10 +24,13 @@ This folder contains comprehensive documentation for the Simple To-Do project, i
 ### Organized Documentation
 - **[prd/](prd/README.md)** - Sharded Product Requirements Document organized into focused sections
 - **[architecture/](architecture/README.md)** - Comprehensive fullstack architecture documentation organized into implementation-ready sections
+- **[stories/](stories/README.md)** - User stories with comprehensive technical context for development implementation
 
 ### Technical Implementation Guides
 - **[azure-functions-astro-guide.md](azure-functions-astro-guide.md)** - Integration guide for Azure Functions with Astro sites following best practices
 - **[elio-struyf-methodology.md](elio-struyf-methodology.md)** - Proven methodology for Astro + Azure Functions integration based on industry expertise
+
+[🔝](#table-of-contents)
 
 ## 🔄 BMAD Methodology Flow
 
@@ -30,15 +42,19 @@ This documentation demonstrates the complete BMAD methodology cycle:
 4. **🏗️ Architecture Design** → [architecture.md](architecture.md)
 5. **🔧 Implementation** → [azure-functions-astro-guide.md](azure-functions-astro-guide.md) + [elio-struyf-methodology.md](elio-struyf-methodology.md)
 
+[🔝](#table-of-contents)
+
 ## 🎯 Documentation Purpose
 
 This documentation serves multiple purposes following BMAD methodology principles:
-- **� Creative Foundation**: Comprehensive brainstorming outputs using proven ideation techniques
+- **🎨 Creative Foundation**: Comprehensive brainstorming outputs using proven ideation techniques
 - **🎯 Problem Definition**: Clear executive summary and problem statement articulation
 - **📋 Requirements Tracking**: User stories, acceptance criteria, and detailed specifications  
-- **�️ Architecture Reference**: Technical decisions and system design rationale with implementation guidance
+- **🏗️ Architecture Reference**: Technical decisions and system design rationale with implementation guidance
 - **🔧 Implementation Patterns**: Step-by-step technical integration following industry best practices
 - **📖 BMAD Demonstration**: Living example of structured methodology applied to real-world development
+
+[🔝](#table-of-contents)
 
 ## 📖 Reading Guide
 
@@ -49,6 +65,8 @@ This documentation serves multiple purposes following BMAD methodology principle
 **For Technical Implementation**: Review [architecture.md](architecture.md) for system design, then [azure-functions-astro-guide.md](azure-functions-astro-guide.md) and [elio-struyf-methodology.md](elio-struyf-methodology.md) for implementation patterns.
 
 **For Creative Process**: Explore [brainstorming-session-results.md](brainstorming-session-results.md) to understand the ideation methodology and feature development process.
+
+[🔝](#table-of-contents)
 
 ---
 
