@@ -1,0 +1,10 @@
+{
+  "$schema": "https://aka.ms/azure/static-web-apps-cli/schema",
+  "configurations": {
+    "astro-basic": {
+      "appLocation": "./app",
+      "outputLocation": "dist",
+      "appDevserverUrl": "http://localhost:4321"
+    }
+  }
+}

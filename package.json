@@ -1,0 +1,42 @@
+{
+  "name": "simple-todo",
+  "type": "module",
+  "version": "0.0.1",
+  "_comments": {
+    "initialization": "Run 'npm run swa:init' first to configure SWA, then use 'npm run dev'",
+    "dev_modes": "Use 'dev' for frontend-only or 'dev:full' for full-stack development"
+  },
+  "scripts": {
+    "swa:init": "pwsh -ExecutionPolicy Bypass -File scripts/4-swa-init.ps1",
+    "build": "npm run build:app && npm run build:api",
+    "build:app": "cd app && npm run build",
+    "build:api": "cd api && npm run build",
+    "build:swa": "swa build",
+    "dev": "npm-run-all --parallel dev:swa dev:app",
+    "dev:full": "npm-run-all --parallel dev:*",
+    "dev:swa": "swa start",
+    "dev:app": "cd app && npm run dev",
+    "dev:api": "pwsh -Command \"& { ./.venv/Scripts/Activate.ps1; cd api; func start --build --cors * --port 7071 }\"",
+    "dev:api:debug": "pwsh -Command \"& { ./.venv/Scripts/Activate.ps1; cd api; $env:languageWorkers__python__arguments='-m debugpy --listen 0.0.0.0:5678 --wait-for-client'; func start --build }\"",
+    "dev:storage": "azurite --silent --location .azurite --debug .azurite/debug.log",
+    "dev:backend": "npm-run-all --parallel dev:storage dev:api",
+    "start": "npm run dev",
+    "stop:storage": "pwsh -ExecutionPolicy Bypass -File scripts/stop-azurite.ps1",
+    "stop:all": "npm-run-all --parallel stop:storage && pwsh -Command \"Get-Process -Name 'func','node','swa' -ErrorAction SilentlyContinue | Stop-Process -Force; Write-Host 'All development services stopped'\"",
+    "install:deps": "pwsh -Command \"& { ./.venv/Scripts/python.exe -m pip install -r requirements.txt }\"",
+    "preview": "cd app && npm run preview",
+    "preview:swa": "swa start --app-location ./app/dist",
+    "deploy": "swa deploy",
+    "install:all": "npm ci && cd app && npm ci && cd ../api && npm ci",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "echo \"Error: no lint specified\" && exit 1",
+    "type-check": "cd app && npm run type-check",
+    "predev": "npm run ensure-deps",
+    "ensure-deps": "node -e \"try { require('npm-run-all'); } catch { console.log('Installing npm-run-all...'); require('child_process').execSync('npm install npm-run-all --save-dev', { stdio: 'inherit' }); }\""
+  },
+  "devDependencies": {
+    "@azure/static-web-apps-cli": "^2.0.1",
+    "npm-run-all": "^4.1.5"
+  }
+}
+

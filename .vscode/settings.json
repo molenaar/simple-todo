@@ -1,8 +1,34 @@
 {
-  "chat.agent.enabled": true,
-  "chat.agent.maxRequests": 15,
-  "github.copilot.chat.agent.runTasks": true,
-  "chat.mcp.discovery.enabled": true,
-  "github.copilot.chat.agent.autoFix": true,
-  "chat.tools.autoApprove": false
+  "github.copilot.chat.codeGeneration.useInstructionFiles": true,
+  "chat.promptFiles": true,
+  
+  // Tailwind CSS Extension Settings
+  "files.associations": {
+    "*.css": "tailwindcss"
+  },
+  "editor.quickSuggestions": {
+    "strings": "on"
+  },
+  
+  // Additional Tailwind CSS Configuration
+  "tailwindCSS.includeLanguages": {
+    "astro": "html"
+  },
+  "tailwindCSS.classAttributes": [
+    "class",
+    "className", 
+    "class:list"
+  ],
+  "tailwindCSS.emmetCompletions": true,
+  "tailwindCSS.experimental.configFile": "app/src/styles/global.css",
+  "editor.colorDecorators": true,
+  "tailwindCSS.colorDecorators": true,
+  
+  "azureFunctions.deploySubpath": "api",
+  "azureFunctions.scmDoBuildDuringDeployment": true,
+  "azureFunctions.pythonVenv": ".venv",
+  "azureFunctions.projectLanguage": "Python",
+  "azureFunctions.projectRuntime": "~4",
+  "debug.internalConsoleOptions": "neverOpen",
+  "azureFunctions.projectLanguageModel": 2
 }
