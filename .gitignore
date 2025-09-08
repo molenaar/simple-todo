@@ -1,0 +1,20 @@
+# BMAD specific
+.bmad-tmp/
+.bmad-cache/
+
+# VS Code
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+
+# General
+.DS_Store
+Thumbs.db
+*.log
