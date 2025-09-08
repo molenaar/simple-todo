@@ -1,0 +1,303 @@
+---
+/**
+ * UploadInterface Component
+ * 
+ * Provides a user interface for uploading markdown files or pasting markdown text.
+ * Supports file selection, text input, and overwrite functionality.
+ * 
+ * @component
+ */
+
+import type { UploadInterfaceProps } from '../../types/index';
+
+export interface Props extends UploadInterfaceProps {}
+
+const {} = Astro.props;
+---
+
+<div class="upload-interface max-w-2xl mx-auto p-6 bg-white dark:bg-gray-800 rounded-lg shadow-lg">
+  <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-6">
+    Upload Markdown File
+  </h2>
+  
+  <form class="upload-form space-y-6">
+    <!-- File Input Section -->
+    <div class="file-input-section">
+      <label 
+        for="markdown-file" 
+        class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+      >
+        Select Markdown File
+      </label>
+      <input
+        type="file"
+        id="markdown-file"
+        name="markdownFile"
+        accept=".md"
+        class="block w-full text-sm text-gray-500 dark:text-gray-400
+               file:mr-4 file:py-2 file:px-4
+               file:rounded-full file:border-0
+               file:text-sm file:font-semibold
+               file:bg-blue-50 file:text-blue-700
+               hover:file:bg-blue-100 dark:file:bg-blue-900 dark:file:text-blue-300
+               dark:hover:file:bg-blue-800"
+        aria-describedby="file-input-help"
+      />
+      <p id="file-input-help" class="mt-1 text-sm text-gray-500 dark:text-gray-400">
+        Choose a markdown (.md) file to upload
+      </p>
+    </div>
+
+    <!-- Textarea Section -->
+    <div class="textarea-section">
+      <label 
+        for="markdown-text" 
+        class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+      >
+        Or Paste Markdown Text
+      </label>
+      <textarea
+        id="markdown-text"
+        name="markdownText"
+        rows="10"
+        placeholder="Paste your markdown content here..."
+        class="block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 
+               rounded-md shadow-sm placeholder-gray-400 dark:placeholder-gray-500
+               focus:outline-none focus:ring-blue-500 focus:border-blue-500
+               dark:bg-gray-700 dark:text-white"
+        aria-describedby="textarea-help"
+      ></textarea>
+      <p id="textarea-help" class="mt-1 text-sm text-gray-500 dark:text-gray-400">
+        Alternative to file upload - paste markdown content directly
+      </p>
+    </div>
+
+    <!-- Overwrite Checkbox -->
+    <div class="checkbox-section">
+      <div class="flex items-center">
+        <input
+          type="checkbox"
+          id="overwrite-existing"
+          name="overwrite"
+          class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 dark:border-gray-600
+                 rounded dark:bg-gray-700"
+        />
+        <label 
+          for="overwrite-existing" 
+          class="ml-2 block text-sm text-gray-700 dark:text-gray-300"
+        >
+          Overwrite existing file?
+        </label>
+      </div>
+      <p class="mt-1 text-sm text-gray-500 dark:text-gray-400 ml-6">
+        Check this to replace any existing file with the same name
+      </p>
+    </div>
+
+    <!-- Error Display -->
+    <div id="error-messages" class="error-messages hidden">
+      <div class="bg-red-50 dark:bg-red-900/50 border border-red-200 dark:border-red-800 rounded-md p-4">
+        <div class="flex">
+          <div class="flex-shrink-0">
+            <svg class="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+            </svg>
+          </div>
+          <div class="ml-3">
+            <h3 class="text-sm font-medium text-red-800 dark:text-red-400">
+              Please correct the following errors:
+            </h3>
+            <ul class="mt-2 text-sm text-red-700 dark:text-red-300 list-disc list-inside" id="error-list">
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Submit Button -->
+    <div class="submit-section">
+      <button
+        type="submit"
+        class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md
+               shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700
+               focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500
+               disabled:opacity-50 disabled:cursor-not-allowed
+               dark:bg-blue-700 dark:hover:bg-blue-800"
+        id="submit-button"
+      >
+        Submit
+      </button>
+    </div>
+  </form>
+</div>
+
+<script>
+  /**
+   * UploadInterface client-side functionality
+   * Handles form validation, file reading, and submission
+   */
+
+  interface UploadFormData {
+    file?: File;
+    markdownText: string;
+    overwrite: boolean;
+  }
+
+  interface ValidationResult {
+    isValid: boolean;
+    errors: string[];
+  }
+
+  class UploadInterfaceHandler {
+    private form: HTMLFormElement;
+    private fileInput: HTMLInputElement;
+    private textArea: HTMLTextAreaElement;
+    private overwriteCheckbox: HTMLInputElement;
+    private errorContainer: HTMLElement;
+    private errorList: HTMLElement;
+    private submitButton: HTMLButtonElement;
+
+    constructor() {
+      this.form = document.querySelector('.upload-form') as HTMLFormElement;
+      this.fileInput = document.getElementById('markdown-file') as HTMLInputElement;
+      this.textArea = document.getElementById('markdown-text') as HTMLTextAreaElement;
+      this.overwriteCheckbox = document.getElementById('overwrite-existing') as HTMLInputElement;
+      this.errorContainer = document.getElementById('error-messages') as HTMLElement;
+      this.errorList = document.getElementById('error-list') as HTMLElement;
+      this.submitButton = document.getElementById('submit-button') as HTMLButtonElement;
+
+      this.bindEvents();
+    }
+
+    private bindEvents(): void {
+      this.form.addEventListener('submit', this.handleSubmit.bind(this));
+      this.fileInput.addEventListener('change', this.handleFileChange.bind(this));
+      this.textArea.addEventListener('input', this.clearErrors.bind(this));
+    }
+
+    private handleFileChange(): void {
+      if (this.fileInput.files && this.fileInput.files[0]) {
+        // Clear textarea when file is selected
+        this.textArea.value = '';
+        this.clearErrors();
+      }
+    }
+
+    private async handleSubmit(event: Event): Promise<void> {
+      event.preventDefault();
+      
+      const formData = this.collectFormData();
+      const validation = this.validateForm(formData);
+
+      if (!validation.isValid) {
+        this.displayErrors(validation.errors);
+        return;
+      }
+
+      this.clearErrors();
+      
+      try {
+        // If file is selected, read its content
+        if (formData.file) {
+          formData.markdownText = await this.readFileContent(formData.file);
+        }
+
+        // Here would be the actual upload logic
+        console.log('Form data ready for submission:', formData);
+        
+        // Show success feedback
+        this.showSuccess();
+        
+      } catch (error) {
+        this.displayErrors([`Error reading file: ${error instanceof Error ? error.message : 'Unknown error'}`]);
+      }
+    }
+
+    private collectFormData(): UploadFormData {
+      return {
+        file: this.fileInput.files?.[0],
+        markdownText: this.textArea.value.trim(),
+        overwrite: this.overwriteCheckbox.checked
+      };
+    }
+
+    private validateForm(data: UploadFormData): ValidationResult {
+      const errors: string[] = [];
+
+      // Check that either file is selected OR textarea has content
+      if (!data.file && !data.markdownText) {
+        errors.push('Please select a markdown file or enter markdown text.');
+      }
+
+      // Check file type if file is selected
+      if (data.file && !data.file.name.endsWith('.md')) {
+        errors.push('Please select a valid markdown (.md) file.');
+      }
+
+      return {
+        isValid: errors.length === 0,
+        errors
+      };
+    }
+
+    private readFileContent(file: File): Promise<string> {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const content = e.target?.result as string;
+          resolve(content);
+        };
+        reader.onerror = () => reject(new Error('Failed to read file'));
+        reader.readAsText(file);
+      });
+    }
+
+    private displayErrors(errors: string[]): void {
+      this.errorList.innerHTML = '';
+      errors.forEach(error => {
+        const li = document.createElement('li');
+        li.textContent = error;
+        this.errorList.appendChild(li);
+      });
+      this.errorContainer.classList.remove('hidden');
+    }
+
+    private clearErrors(): void {
+      this.errorContainer.classList.add('hidden');
+      this.errorList.innerHTML = '';
+    }
+
+    private showSuccess(): void {
+      // Simple success feedback - could be enhanced with proper notification system
+      const originalText = this.submitButton.textContent;
+      this.submitButton.textContent = 'Success!';
+      this.submitButton.classList.add('bg-green-600', 'hover:bg-green-700');
+      this.submitButton.classList.remove('bg-blue-600', 'hover:bg-blue-700');
+      
+      setTimeout(() => {
+        this.submitButton.textContent = originalText;
+        this.submitButton.classList.remove('bg-green-600', 'hover:bg-green-700');
+        this.submitButton.classList.add('bg-blue-600', 'hover:bg-blue-700');
+        this.form.reset();
+      }, 2000);
+    }
+  }
+
+  // Initialize when DOM is loaded
+  document.addEventListener('DOMContentLoaded', () => {
+    new UploadInterfaceHandler();
+  });
+</script>
+
+<style>
+  /* Component-specific styles using @layer for Tailwind CSS */
+  @layer components {
+    .upload-interface {
+      @apply transition-all duration-200 ease-in-out;
+    }
+    
+    .upload-interface:hover {
+      @apply shadow-xl;
+    }
+  }
+</style>

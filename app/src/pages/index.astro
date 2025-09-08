@@ -1,5 +1,5 @@
 ---
-
+import UploadInterface from '../components/features/UploadInterface.astro';
 ---
 
 <html lang="en">
@@ -8,9 +8,15 @@
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="viewport" content="width=device-width" />
 		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
+		<title>Simple Todo - Upload Interface Test</title>
+		<script src="https://cdn.tailwindcss.com"></script>
 	</head>
-	<body>
-		<h1>Astro</h1>
+	<body class="bg-gray-50 dark:bg-gray-900 min-h-screen py-8">
+		<div class="container mx-auto px-4">
+			<h1 class="text-3xl font-bold text-center text-gray-900 dark:text-white mb-8">
+				Simple Todo - Upload Interface
+			</h1>
+			<UploadInterface />
+		</div>
 	</body>
 </html>
