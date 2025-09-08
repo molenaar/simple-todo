@@ -18,3 +18,10 @@ yarn-debug.log*
 .DS_Store
 Thumbs.db
 *.log
+# Claude and Gemini
+claude-*
+gemini-*
+.claude/
+# BMAD (local only)
+.bmad-core/
+.bmad-*/
