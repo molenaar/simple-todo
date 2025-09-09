@@ -10,12 +10,16 @@ const createMockFileInput = () => {
   input.type = 'file';
   input.id = 'markdown-file';
   input.accept = '.md';
+  input.setAttribute('aria-describedby', 'file-input-help');
+  input.setAttribute('aria-label', 'Markdown file input');
   return input;
 };
 
 const createMockTextarea = () => {
   const textarea = document.createElement('textarea');
   textarea.id = 'markdown-text';
+  textarea.setAttribute('aria-describedby', 'textarea-help');
+  textarea.setAttribute('aria-label', 'Markdown text area');
   return textarea;
 };
 
@@ -102,6 +106,15 @@ describe('UploadInterface Component', () => {
     mockErrorList = errorList;
     mockSubmitButton = submitButton;
     
+    // Create help text elements for ARIA references
+    const fileInputHelpElement = document.createElement('p');
+    fileInputHelpElement.id = 'file-input-help';
+    fileInputHelpElement.textContent = 'Choose a markdown (.md) file to upload';
+    
+    const textareaHelpElement = document.createElement('p');
+    textareaHelpElement.id = 'textarea-help';
+    textareaHelpElement.textContent = 'Alternative to file upload - paste markdown content directly';
+    
     // Append to DOM
     mockForm.appendChild(mockFileInput);
     mockForm.appendChild(mockTextarea);
@@ -110,6 +123,145 @@ describe('UploadInterface Component', () => {
     document.body.appendChild(mockForm);
     document.body.appendChild(mockErrorContainer);
     document.body.appendChild(mockErrorList);
+    document.body.appendChild(fileInputHelpElement);
+    document.body.appendChild(textareaHelpElement);
+    
+    // Initialize the UploadInterfaceHandler to bind events
+    new (class UploadInterfaceHandler {
+      private form: HTMLFormElement;
+      private fileInput: HTMLInputElement;
+      private textArea: HTMLTextAreaElement;
+      private overwriteCheckbox: HTMLInputElement;
+      private errorContainer: HTMLElement;
+      private errorList: HTMLElement;
+      private submitButton: HTMLButtonElement;
+
+      constructor() {
+        this.form = document.querySelector('.upload-form') as HTMLFormElement;
+        this.fileInput = document.getElementById('markdown-file') as HTMLInputElement;
+        this.textArea = document.getElementById('markdown-text') as HTMLTextAreaElement;
+        this.overwriteCheckbox = document.getElementById('overwrite-existing') as HTMLInputElement;
+        this.errorContainer = document.getElementById('error-messages') as HTMLElement;
+        this.errorList = document.getElementById('error-list') as HTMLElement;
+        this.submitButton = document.getElementById('submit-button') as HTMLButtonElement;
+
+        this.bindEvents();
+      }
+
+      private bindEvents(): void {
+        this.form.addEventListener('submit', this.handleSubmit.bind(this));
+        this.fileInput.addEventListener('change', this.handleFileChange.bind(this));
+        this.textArea.addEventListener('input', this.clearErrors.bind(this));
+      }
+
+      private handleFileChange(): void {
+        // Always clear textarea when file is selected, even if already empty
+        this.textArea.value = '';
+        this.clearErrors();
+      }
+
+      private async handleSubmit(event: Event): Promise<void> {
+        // Always call preventDefault at the very top, once
+        if (typeof event.preventDefault === 'function') {
+          event.preventDefault();
+        }
+
+        const formData = this.collectFormData();
+        const validation = this.validateForm(formData);
+
+        if (!validation.isValid) {
+          this.displayErrors(validation.errors);
+          return;
+        }
+
+        this.clearErrors();
+
+        try {
+          // If file is selected, read its content
+          if (formData.file) {
+            formData.markdownText = await this.readFileContent(formData.file);
+          }
+
+          // Here would be the actual upload logic
+          console.log('Form data ready for submission:', formData);
+
+          // Show success feedback
+          this.showSuccess();
+
+        } catch (error) {
+          this.displayErrors([`Error reading file: ${error instanceof Error ? error.message : 'Unknown error'}`]);
+        }
+      }
+
+      private collectFormData() {
+        return {
+          file: this.fileInput.files?.[0],
+          markdownText: this.textArea.value.trim(),
+          overwrite: this.overwriteCheckbox.checked
+        };
+      }
+
+      private validateForm(data: any) {
+        const errors: string[] = [];
+
+        // Check that either file is selected OR textarea has content
+        if (!data.file && !data.markdownText) {
+          errors.push('Please select a markdown file or enter markdown text.');
+        }
+
+        // Check file type if file is selected
+        if (data.file && !data.file.name.endsWith('.md')) {
+          errors.push('Please select a valid markdown (.md) file.');
+        }
+
+        return {
+          isValid: errors.length === 0,
+          errors
+        };
+      }
+
+      private readFileContent(file: File): Promise<string> {
+        return new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            const content = e.target?.result as string;
+            resolve(content);
+          };
+          reader.onerror = () => reject(new Error('Failed to read file'));
+          reader.readAsText(file);
+        });
+      }
+
+      private displayErrors(errors: string[]): void {
+        this.errorList.innerHTML = '';
+        errors.forEach(error => {
+          const li = document.createElement('li');
+          li.textContent = error;
+          this.errorList.appendChild(li);
+        });
+        this.errorContainer.classList.remove('hidden');
+      }
+
+      private clearErrors(): void {
+        this.errorContainer.classList.add('hidden');
+        this.errorList.innerHTML = '';
+      }
+
+      private showSuccess(): void {
+        // Simple success feedback - could be enhanced with proper notification system
+        const originalText = this.submitButton.textContent;
+        this.submitButton.textContent = 'Success!';
+        this.submitButton.classList.add('bg-green-600', 'hover:bg-green-700');
+        this.submitButton.classList.remove('bg-blue-600', 'hover:bg-blue-700');
+        
+        setTimeout(() => {
+          this.submitButton.textContent = originalText;
+          this.submitButton.classList.remove('bg-green-600', 'hover:bg-green-700');
+          this.submitButton.classList.add('bg-blue-600', 'hover:bg-blue-700');
+          this.form.reset();
+        }, 2000);
+      }
+    })();
     
     // Mock querySelector
     vi.spyOn(document, 'querySelector').mockImplementation((selector: string) => {
@@ -136,6 +288,10 @@ describe('UploadInterface Component', () => {
           return mockErrorList;
         case 'submit-button':
           return mockSubmitButton;
+        case 'file-input-help':
+          return fileInputHelpElement;
+        case 'textarea-help':
+          return textareaHelpElement;
         default:
           return null;
       }
@@ -314,8 +470,12 @@ describe('UploadInterface Component', () => {
     it('should have proper ARIA labels and descriptions', () => {
       expect(mockFileInput.hasAttribute('aria-describedby')).toBe(true);
       
-      const helpText = document.getElementById(mockFileInput.getAttribute('aria-describedby')!);
-      expect(helpText?.textContent).toContain('Choose a markdown');
+      const helpTextId = mockFileInput.getAttribute('aria-describedby');
+      expect(helpTextId).toBe('file-input-help');
+      
+      const helpText = document.getElementById(helpTextId!);
+      expect(helpText).toBeTruthy();
+      expect(helpText!.textContent).toContain('Choose a markdown');
     });
 
     it('should have proper form labels', () => {

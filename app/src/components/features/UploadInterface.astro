@@ -12,7 +12,7 @@ import type { UploadInterfaceProps } from '../../types/index';
 
 export interface Props extends UploadInterfaceProps {}
 
-const {} = Astro.props;
+const { onSubmit, onError } = Astro.props;
 ---
 
 <div class="upload-interface max-w-2xl mx-auto p-6 bg-white dark:bg-gray-800 rounded-lg shadow-lg">
@@ -20,7 +20,7 @@ const {} = Astro.props;
     Upload Markdown File
   </h2>
   
-  <form class="upload-form space-y-6">
+  <form class="upload-form space-y-6" novalidate>
     <!-- File Input Section -->
     <div class="file-input-section">
       <label 
@@ -42,6 +42,7 @@ const {} = Astro.props;
                hover:file:bg-blue-100 dark:file:bg-blue-900 dark:file:text-blue-300
                dark:hover:file:bg-blue-800"
         aria-describedby="file-input-help"
+        aria-label="Markdown file input"
       />
       <p id="file-input-help" class="mt-1 text-sm text-gray-500 dark:text-gray-400">
         Choose a markdown (.md) file to upload
@@ -66,6 +67,7 @@ const {} = Astro.props;
                focus:outline-none focus:ring-blue-500 focus:border-blue-500
                dark:bg-gray-700 dark:text-white"
         aria-describedby="textarea-help"
+        aria-label="Markdown text area"
       ></textarea>
       <p id="textarea-help" class="mt-1 text-sm text-gray-500 dark:text-gray-400">
         Alternative to file upload - paste markdown content directly
@@ -95,7 +97,7 @@ const {} = Astro.props;
     </div>
 
     <!-- Error Display -->
-    <div id="error-messages" class="error-messages hidden">
+  <div id="error-messages" class="error-messages hidden" aria-live="polite" aria-atomic="true">
       <div class="bg-red-50 dark:bg-red-900/50 border border-red-200 dark:border-red-800 rounded-md p-4">
         <div class="flex">
           <div class="flex-shrink-0">
@@ -176,16 +178,17 @@ const {} = Astro.props;
     }
 
     private handleFileChange(): void {
-      if (this.fileInput.files && this.fileInput.files[0]) {
-        // Clear textarea when file is selected
-        this.textArea.value = '';
-        this.clearErrors();
-      }
+      // Always clear textarea when file is selected, even if already empty
+      this.textArea.value = '';
+      this.clearErrors();
     }
 
     private async handleSubmit(event: Event): Promise<void> {
-      event.preventDefault();
-      
+      // Always call preventDefault at the very top, once
+      if (typeof event.preventDefault === 'function') {
+        event.preventDefault();
+      }
+
       const formData = this.collectFormData();
       const validation = this.validateForm(formData);
 
@@ -195,7 +198,7 @@ const {} = Astro.props;
       }
 
       this.clearErrors();
-      
+
       try {
         // If file is selected, read its content
         if (formData.file) {
@@ -204,10 +207,10 @@ const {} = Astro.props;
 
         // Here would be the actual upload logic
         console.log('Form data ready for submission:', formData);
-        
+
         // Show success feedback
         this.showSuccess();
-        
+
       } catch (error) {
         this.displayErrors([`Error reading file: ${error instanceof Error ? error.message : 'Unknown error'}`]);
       }

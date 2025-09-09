@@ -28,8 +28,8 @@
     "preview:swa": "swa start --app-location ./app/dist",
     "deploy": "swa deploy",
     "install:all": "npm ci && cd app && npm ci && cd ../api && npm ci",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "lint": "echo \"Error: no lint specified\" && exit 1",
+  "test": "cd app && npm run test",
+  "lint": "cd app && npm run lint",
     "type-check": "cd app && npm run type-check",
     "predev": "npm run ensure-deps",
     "ensure-deps": "node -e \"try { require('npm-run-all'); } catch { console.log('Installing npm-run-all...'); require('child_process').execSync('npm install npm-run-all --save-dev', { stdio: 'inherit' }); }\""
